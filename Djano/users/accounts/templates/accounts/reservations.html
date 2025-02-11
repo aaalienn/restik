@@ -1,0 +1,206 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .reservations-section {
+        padding: 40px 0;
+        background-color: #f5f5f5;
+    }
+
+    .reservation-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .reservation-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .reservation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .reservation-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .reservation-date {
+        color: #666;
+    }
+
+    .reservation-details {
+        margin-bottom: 15px;
+    }
+
+    .reservation-details p {
+        margin: 5px 0;
+        color: #666;
+    }
+
+    .reservation-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .confirm-btn {
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .confirm-btn:hover {
+        background-color: #27ae60;
+    }
+
+    .delete-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .delete-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .confirmed {
+        background-color: #f1f9f1;
+        border-left: 4px solid #2ecc71;
+    }
+
+    .confirmed .reservation-status {
+        color: #2ecc71;
+        font-weight: bold;
+    }
+
+    .pending {
+        border-left: 4px solid #f1c40f;
+    }
+
+    .filters {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .filter-btn {
+        background: white;
+        border: 1px solid #ddd;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+        background: #2ecc71;
+        color: white;
+        border-color: #2ecc71;
+    }
+</style>
+
+<div class="reservations-section">
+    <div class="container">
+        <h1 class="text-center mb-4">Управление бронированиями</h1>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="confirmed">Подтвержденные</button>
+            <button class="filter-btn" data-filter="pending">Ожидающие</button>
+        </div>
+
+        <div class="reservations-list">
+            {% for reservation in reservations %}
+            <div class="reservation-card {% if reservation.is_confirmed %}confirmed{% else %}pending{% endif %}">
+                <div class="reservation-header">
+                    <span class="reservation-name">{{ reservation.first_name }} {{ reservation.last_name }}</span>
+                    <span class="reservation-date">{{ reservation.date|date:"d.m.Y" }}</span>
+                </div>
+                <div class="reservation-details">
+                    <p><strong>Телефон:</strong> {{ reservation.phone }}</p>
+                    <p><strong>Email:</strong> {{ reservation.email }}</p>
+                    <p><strong>Создано:</strong> {{ reservation.created_at|date:"d.m.Y H:i" }}</p>
+                    <p class="reservation-status">
+                        {% if reservation.is_confirmed %}
+                            Подтверждено
+                        {% else %}
+                            Ожидает подтверждения
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="reservation-actions">
+                    <form action="{% url 'toggle_reservation' reservation.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="confirm-btn">
+                            {% if reservation.is_confirmed %}
+                                Отменить подтверждение
+                            {% else %}
+                                Подтвердить
+                            {% endif %}
+                        </button>
+                    </form>
+                    <form action="{% url 'delete_reservation' reservation.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn" onclick="return confirm('Вы уверены, что хотите удалить это бронирование?')">
+                            Удалить
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center">
+                <p>Нет активных бронирований</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const reservationCards = document.querySelectorAll('.reservation-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            
+            const filterValue = button.dataset.filter;
+            reservationCards.forEach(card => {
+                if (filterValue === 'all') {
+                    card.style.display = 'block';
+                } else if (filterValue === 'confirmed') {
+                    card.style.display = card.classList.contains('confirmed') ? 'block' : 'none';
+                } else if (filterValue === 'pending') {
+                    card.style.display = !card.classList.contains('confirmed') ? 'block' : 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

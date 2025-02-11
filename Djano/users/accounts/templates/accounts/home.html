@@ -1,0 +1,937 @@
+{% extends "accounts/base.html" %}
+{% load static %}  
+{% block content %}
+
+<style>
+    /* General Styles */
+    body {
+        background-color: #f5f5f5;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    /* Navigation */
+    .navbar-default {
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 15px 0;
+    }
+    
+    .navbar-nav > li > a.color_animation {
+        color: #000000 !important;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        padding: 10px 15px;
+    }
+    
+    .navbar-nav > li > a.color_animation:hover {
+        color: #2ecc71 !important;
+        transform: translateY(-2px);
+    }
+    
+    /* Sections */
+    .description_content {
+        padding: 50px 0;
+        margin: 30px 0;
+    }
+    
+    .background_content {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 40px 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+    }
+    
+    .background_content h1 {
+        font-size: 2.5em;
+        text-transform: uppercase;
+    }
+    
+    .background_content span {
+        color: #2ecc71;
+    }
+    
+    /* Images */
+    .img-section img {
+        border-radius: 8px;
+        margin: 10px;
+        transition: transform 0.3s ease;
+    }
+    
+    .img-section img:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Forms */
+    .form {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .form-btn {
+        background-color: #2ecc71;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .form-btn:hover {
+        background-color: #27ae60;
+    }
+    
+    /* Footer */
+    .sub_footer {
+        background-color: #333;
+        padding: 20px 0;
+        color: white;
+    }
+    
+    .sub_footer a {
+        color: #2ecc71;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .sub_footer a:hover {
+        color: #27ae60;
+    }
+    
+    /* Menu Section */
+    #filter-list {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+    
+    #filter-list li {
+        display: inline-block;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    #filter-list li:hover {
+        color: #2ecc71;
+    }
+    
+    #portfolio {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 0;
+        list-style: none;
+    }
+    
+    #portfolio li {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    
+    #portfolio img {
+        width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+    
+    #portfolio img:hover {
+        transform: scale(1.1);
+    }
+    
+    .white {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px;
+        margin: 0;
+        text-align: center;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .background_content h1 {
+            font-size: 1.8em;
+        }
+        
+        #portfolio {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
+
+    .navbar-default {
+        background-color: rgba(255, 255, 255, 0.95);
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-brand {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333 !important;
+        padding: 15px;
+    }
+    
+    .navbar-brand i {
+        color: #2ecc71;
+        margin-right: 5px;
+    }
+    
+    .navbar-nav > li > a {
+        padding: 20px 15px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-nav > li > a i {
+        margin-right: 5px;
+        font-size: 16px;
+    }
+    
+    .navbar-nav > li > a:hover,
+    .navbar-nav > li > a:focus {
+        color: #2ecc71 !important;
+        background-color: transparent;
+        transform: translateY(-2px);
+    }
+    
+    .navactive {
+        color: #2ecc71 !important;
+        border-bottom: 2px solid #2ecc71;
+    }
+
+
+    .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .navbar-nav > li {
+        float: none;
+        display: inline-block;
+    }
+    
+    .navbar-nav > li > a {
+        padding: 15px 10px;
+        white-space: nowrap;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        .navbar-nav > li > a {
+            padding: 15px 8px;
+            font-size: 12px;
+        }
+    }
+    
+    @media (max-width: 991px) {
+        .navbar-nav {
+            flex-wrap: wrap;
+        }
+        
+        .navbar-nav > li {
+            flex: 0 0 auto;
+            margin: 5px;
+        }
+    }
+    
+    .user-profile > a {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 4px;
+    }
+    
+    .dropdown-menu > li > a {
+        padding: 10px 20px;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+    
+    .dropdown-menu > li > a:hover {
+        background-color: #f8f9fa;
+        color: #2ecc71;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .navbar-nav > li > a {
+            padding: 10px 15px;
+        }
+        
+        .navbar-collapse {
+            background-color: white;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    }
+
+    /* Menu Filter Active State */
+    #filter-list li.active {
+        color: #2ecc71;
+        border-bottom: 2px solid #2ecc71;
+    }
+    
+    /* Carousel Customization */
+    .carousel-inner .item img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .carousel-indicators li {
+        background-color: #fff;
+        border: 1px solid #2ecc71;
+    }
+    
+    .carousel-indicators .active {
+        background-color: #2ecc71;
+    }
+
+    /* Menu Filtering */
+    #filter-list {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    #filter-list li {
+        display: inline-block;
+        padding: 8px 15px;
+        margin: 0 5px;
+        cursor: pointer;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    #filter-list li.active {
+        color: #2ecc71;
+        border-bottom: 2px solid #2ecc71;
+    }
+    
+    #portfolio {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    #portfolio li {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+     
+    .beer-gallery {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    
+    .main-beer-img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .main-beer-img:hover {
+        transform: scale(1.02);
+    }
+    
+    .beer-thumbnails {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+    
+    .beer-thumbnails img {
+        width: 30%;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+    }
+    
+    .beer-thumbnails img:hover {
+        opacity: 0.8;
+    }
+    
+    .beer-title {
+        color: #2ecc71;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+    
+    .beer-features {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+    
+    .feature {
+        text-align: center;
+        padding: 15px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+    
+    .feature:hover {
+        transform: translateY(-5px);
+    }
+    
+    .feature i {
+        color: #2ecc71;
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+    
+    .feature h3 {
+        font-size: 1.2em;
+        margin: 10px 0;
+        color: #333;
+    }
+    
+    .feature p {
+        color: #666;
+        margin: 0;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .beer-features {
+            flex-direction: column;
+        }
+        
+        .feature {
+            margin-bottom: 15px;
+        }
+    }
+
+
+
+    .story-background {
+        background-color: #fff;
+        padding: 60px 0;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    
+    .story-content {
+        padding: 20px;
+    }
+    
+    .story-title {
+        color: #333;
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    .story-title:after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: #2ecc71;
+        margin-top: 10px;
+    }
+    
+    .icon-wrapper {
+        color: #2ecc71;
+        margin: 20px 0;
+    }
+    
+    .desc-text {
+        font-size: 1.1em;
+        line-height: 1.8;
+        color: #666;
+        margin-bottom: 30px;
+    }
+    
+    .story-features {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+    
+    .feature-item {
+        text-align: center;
+        padding: 15px;
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-item:hover {
+        transform: translateY(-5px);
+    }
+    
+    .feature-item i {
+        color: #2ecc71;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    
+    .feature-item span {
+        display: block;
+        color: #666;
+        font-size: 0.9em;
+    }
+    
+    .img-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .img-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .story-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .img-item:hover .story-img {
+        transform: scale(1.1);
+    }
+    
+    .img-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(46, 204, 113, 0.9);
+        color: white;
+        padding: 10px;
+        text-align: center;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .img-item:hover .img-overlay {
+        transform: translateY(0);
+    }
+    
+    @media (max-width: 768px) {
+        .story-features {
+            flex-direction: column;
+        }
+        
+        .feature-item {
+            margin-bottom: 20px;
+        }
+        
+        .img-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    .alert-messages {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .alert {
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        animation: fadeOut 5s forwards;
+    }
+
+
+    #portfolio li {
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+        transition: all 0.3s ease;
+    }
+    
+    #portfolio li img {
+        transition: transform 0.3s ease;
+    }
+    
+    #portfolio li .white {
+        transition: background 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    #filter-list li {
+        position: relative;
+        cursor: pointer;
+    }
+    
+    #filter-list li::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 50%;
+        background-color: #2ecc71;
+        transition: all 0.3s ease;
+    }
+    
+    #filter-list li:hover::after {
+        width: 100%;
+        left: 0;
+    }
+    
+    #filter-list li.active::after {
+        width: 100%;
+        left: 0;
+    }
+
+    </style>
+
+    {% if messages %}
+    <div class="alert-messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+        <p>Welcome, {{ user.username }}!</p>
+        
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-cutlery"></i> Ресторан</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav main-nav">
+                    <li><a class="navactive color_animation" href="#top"><i class="fa fa-home"></i> ГЛАВНАЯ</a></li>
+                    <li><a class="color_animation" href="#story"><i class="fa fa-info-circle"></i> О НАС</a></li>
+                    <li><a class="color_animation" href="#pricing"><i class="fa fa-tags"></i> ЦЕНА</a></li>
+                    <li><a class="color_animation" href="#beer"><i class="fa fa-beer"></i> ПИВО</a></li>
+                    <li><a class="color_animation" href="#reservation"><i class="fa fa-calendar"></i> БРОНЬ</a></li>
+                    <li><a class="color_animation" href="#contact"><i class="fa fa-envelope"></i> СВЯЗЬ</a></li>
+                    <li><a class="color_animation" href="{% url 'news' %}"><i class="fa fa-newspaper"></i> НОВОСТИ</a></li>
+                    {% if user.is_staff %}
+                    <li><a class="color_animation" href="{% url 'reservations_list' %}">
+                        <i class="fa fa-list"></i> УПРАВЛЕНИЕ БРОНЯМИ
+                    </a></li>
+                    {% endif %}
+                    <li class="user-profile">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> {{ user.username }}
+                            <span class="caret"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+    <section id="story" class="description_content">
+        <div class="story-background">
+            <div class="text-content container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="story-content">
+                            <h1 class="story-title">О НАС</h1>
+                            <div class="icon-wrapper">
+                                <i class="fa fa-cutlery fa-2x"></i>
+                            </div>
+                            <p class="desc-text">Ресторан – это место для простоты. Хорошая еда, хорошее пиво и хорошее обслуживание. «Простота» — вот название игры, и мы умеем находить ее во всех нужных местах, даже в вашем обеденном зале.</p>
+                            <div class="story-features">
+                                <div class="feature-item">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span>10+ лет опыта</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fa fa-users"></i>
+                                    <span>Довольные клиенты</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fa fa-star"></i>
+                                    <span>Высокое качество</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="img-grid">
+                            <div class="img-item">
+                                <img src="{% static 'css/images/kabob.jpg' %}" alt="Кебаб" class="story-img">
+                                <div class="img-overlay">
+                                    <span>Лучшие блюда</span>
+                                </div>
+                            </div>
+                            <div class="img-item">
+                                <img src="{% static 'css/images/limes.jpg' %}" alt="Лаймы" class="story-img">
+                                <div class="img-overlay">
+                                    <span>Свежие ингредиенты</span>
+                                </div>
+                            </div>
+                            <div class="img-item">
+                                <img src="{% static 'css/images/radish.jpg' %}" alt="Редис" class="story-img">
+                                <div class="img-overlay">
+                                    <span>Здоровая еда</span>
+                                </div>
+                            </div>
+                            <div class="img-item">
+                                <img src="{% static 'css/images/corn.jpg' %}" alt="Кукуруза" class="story-img">
+                                <div class="img-overlay">
+                                    <span>Органические продукты</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="pricing" class="description_content">
+        <div class="pricing background_content">
+            <h1>Цены <span>Меню</span></h1>
+        </div>
+        <div class="text-content container">
+            <div class="row">
+                <div id="w">
+                    <ul id="filter-list" class="clearfix">
+                        <li class="filter active" data-filter="all">Все</li>
+                        <li class="filter" data-filter="breakfast">Завтраки</li>
+                        <li class="filter" data-filter="special">Специальные</li>
+                        <li class="filter" data-filter="desert">Десерты</li>
+                        <li class="filter" data-filter="dinner">Ужин</li>
+                    </ul>
+                    <ul id="portfolio">
+                        <li class="item breakfast">
+                            <img src="{% static 'css/images/menemen.jpg' %}" alt="Food">
+                            <h2 class="white">45 манат</h2>
+                        </li>
+                        <li class="item dinner special">
+                            <img src="{% static 'css/images/zulyen.jpg' %}" alt="Food">
+                            <h2 class="white">55 манат</h2>
+                        </li>
+                        <li class="item dinner breakfast">
+                            <img src="{% static 'css/images/cezar.jpg' %}" alt="Food">
+                            <h2 class="white">30 манат</h2>
+                        </li>
+                        <li class="item special">
+                            <img src="{% static 'css/images/kebabcik.jpg' %}" alt="Food">
+                            <h2 class="white">60 манат</h2>
+                        </li>
+                        <li class="item dinner">
+                            <img src="{% static 'css/images/bors.jpg' %}" alt="Food">
+                            <h2 class="white">40 манат</h2>
+                        </li>
+                        <li class="item special desert">
+                            <img src="{% static 'css/images/medovik.jpg' %}" alt="Food">
+                            <h2 class="white">35 манат</h2>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<section id="beer" class="description_content">
+    <div class="beer background_content">
+        <h1>Лучшее <span>Место</span> для проведения времени</h1>
+    </div>
+    <div class="text-content container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="beer-gallery">
+                    <div class="beer-thumbnails">
+                        <img src="{% static 'css/images/beer1.webp' %}" alt="Beer 1">
+                        <img src="{% static 'css/images/beer2.webp' %}" alt="Beer 2">
+                        <img src="{% static 'css/images/beer3.webp' %}" alt="Beer 3">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-md-offset-1">
+                <h1 class="beer-title">НАШЕ ПИВО</h1>
+                <div class="icon-beer fa-2x"></div>
+                <p class="desc-text">Здесь, в ресторане, мы все любим пиво. Новые и смелые вкусы появляются у нас каждую неделю, и мы не можем не похвастаться ими. Хотя мы любим классику, мы всегда страстно увлечены открытием чего-то нового, поэтому заходите и попробуйте наше пиво в лучшем виде.</p>
+                <div class="beer-features">
+                    <div class="feature">
+                        <i class="fa fa-beer"></i>
+                        <h3>Крафтовое пиво</h3>
+                        <p>Уникальные сорта</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa fa-star"></i>
+                        <h3>Премиум качество</h3>
+                        <p>Лучшие ингредиенты</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa fa-clock-o"></i>
+                        <h3>Happy Hour</h3>
+                        <p>17:00 - 19:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    
+    
+
+    <section id="reservation" class="description_content">
+        <div class="featured background_content">
+            <h1>Забронируйте столик!</h1>
+        </div>
+        <form action="{% url 'reserve' %}" method="post">
+            {% csrf_token %}
+            <div class="text-content container">
+                <div class="inner contact">
+                    <div class="contact-form">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-6 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-xs-6">
+                                            <input type="text" name="first_name" id="first_name" required="required" class="form" placeholder="First Name" />
+                                            <input type="text" name="last_name" id="last_name" required="required" class="form" placeholder="Last Name" />
+                                            <input type="date" name="datepicker" id="datepicker" required="required" class="form" placeholder="Reservation Date" />
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-xs-6">
+                                            <input type="text" name="phone" id="phone" required="required" class="form" placeholder="Phone" />
+                                            <input type="email" name="email" id="email" required="required" class="form" placeholder="Email" />
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button type="submit" id="submit" name="submit" class="text-center form-btn form-btn">Reserve</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-xs-12">
+                                    <div class="right-text">
+                                        <h2>Hours</h2><hr>
+                                        <p>Понедельник-пятница: 7:30-11:30</p>
+                                        <p>Суббота и воскресенье: 8:00-9:00</p>
+                                        <p>Понедельник-пятница: 12:00-17:00</p>
+                                        <p>Понедельник-суббота: 18:00-1:00</p>
+                                        <p>Воскресенье-понедельник: 17:30-00:00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>Книга жалоб и предложений!</h2>
+                </div>
+            </div>
+        </div>
+        <form action="{% url 'message' %}" method="post">
+            {% csrf_token %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="inner contact">
+                            <div class="contact-form">
+                                <div class="col-md-6">
+                                    <input type="text" name="name" id="name" required="required" class="form" placeholder="Имя" />
+                                    <input type="text" name="subject" id="subject" required="required" class="form" placeholder="Тема" />
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea name="message" id="message" class="form textarea" placeholder="Сообщение"></textarea>
+                                </div>
+                                <div class="relative fullwidth col-xs-12">
+                                    <button type="submit" id="submit" name="submit" class="text-center form-btn form-btn">Отправить сообщение</button>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+        
+    <footer class="sub_footer">
+        <div class="container">
+            <div class="col-md-4">
+                <p class="sub-footer-text text-center" style="color: white;">
+                    <h6 style="color: white">&copy;Restaurant La Ashgabat, Since <span style="color: white">1983</span></h6>
+                </p>
+                <h6 style="color: white;">Связь с нами <span style="color: rgb(189, 189, 189)">+99361616161</span></h6>
+            </div>
+            <div class="col-md-4">
+                <p class="sub-footer-text text-center" style="color: white;">Вернуться <a href="#top">Обратно</a></p>
+            </div>
+            <div class="col-md-4">
+                <p class="sub-footer-text text-center" style="color: white;">Поддержать <a href="#" target="_blank">Нас</a></p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="{% static 'js/sliders.js' %}"></script>
+{% endblock extra_js %}
